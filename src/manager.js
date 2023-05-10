@@ -50,10 +50,10 @@ export class IfcManager {
 
     async setupIfcLoader() {
         // Wasm {OK}
-        await this.ifcLoader.ifcManager.setWasmPath("../static/common/");
+        await this.ifcLoader.ifcManager.setWasmPath("static/common/");
 
         // Multithreading
-        await this.ifcLoader.ifcManager.useWebWorkers(true, 'static/common/IFCWorker.js')
+        await this.ifcLoader.ifcManager.useWebWorkers(true, '../static/common/IFCWorker.js')
 
         // Picking
         this.ifcLoader.ifcManager.setupThreeMeshBVH(computeBoundsTree, disposeBoundsTree, acceleratedRaycast);
