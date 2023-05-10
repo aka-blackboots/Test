@@ -16,7 +16,8 @@ export class IfcManager {
 
         this.onPick = this.onPick.bind(this)
 
-        this.setupIfcLoader().then()
+        this.setupIfcLoader();
+
         this.setupFileOpenReader()
     }
 
@@ -50,10 +51,10 @@ export class IfcManager {
 
     async setupIfcLoader() {
         // Multithreading
-        await this.ifcLoader.ifcManager.useWebWorkers(true, 'static/workers/IFCWorker.js')
+        await this.ifcLoader.ifcManager.useWebWorkers(true, '/static/IFCWorker.js')
 
         // Wasm
-        await this.ifcLoader.ifcManager.setWasmPath("../static/wasm/");
+        await this.ifcLoader.ifcManager.setWasmPath("../static/");
 
         // Picking
         this.ifcLoader.ifcManager.setupThreeMeshBVH(computeBoundsTree, disposeBoundsTree, acceleratedRaycast);
