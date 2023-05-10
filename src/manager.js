@@ -1,5 +1,4 @@
 // TODO change reference of library
-//import { IFCLoader } from "three/examples/jsm/loaders/IFCLoader.js"
 import { IFCLoader } from "web-ifc-three/IFCLoader";
 
 import { Raycaster, Vector2 } from "three"
@@ -22,35 +21,45 @@ export class IfcManager {
     }
 
     setupFileOpenReader() {
+        // const input = document.getElementById('file-input');
+        // input.addEventListener(
+        //     'change',
+        //     (changed) => {
+        //         const ifcURL = URL.createObjectURL(changed.target.files[0]);
+        //         this.ifcLoader.load(ifcURL,
+        //             (ifcModel) => {
+        //                 this.ifcModels.push(ifcModel)
+        //                 this.scene.add(ifcModel)
+        //             },
+        //             null,
+        //             null);
+        //     },
+        //     false,
+        // );
+
         const input = document.getElementById('file-input');
         input.addEventListener(
             'change',
             (changed) => {
                 const ifcURL = URL.createObjectURL(changed.target.files[0]);
-                this.ifcLoader.load(ifcURL,
-                    (ifcModel) => {
-                        this.ifcModels.push(ifcModel)
-                        this.scene.add(ifcModel)
-                    },
-                    null,
-                    null);
+                this.ifcLoader.load(ifcURL, (ifcModel) => this.scene.add(ifcModel));
             },
             false,
         );
     }
 
     async setupIfcLoader() {
+        // Multithreading
+        await this.ifcLoader.ifcManager.useWebWorkers(true, 'static/workers/IFCWorker.js')
+
         // Wasm
-       await this.ifcLoader.ifcManager.setWasmPath("static/wasm/");
+        await this.ifcLoader.ifcManager.setWasmPath("../static/wasm/");
 
         // Picking
         this.ifcLoader.ifcManager.setupThreeMeshBVH(computeBoundsTree, disposeBoundsTree, acceleratedRaycast);
 
         // Get the canvas
         this.threeCanvas.ondblclick = this.onPick
-
-        // Multithreading
-        // await this.ifcLoader.ifcManager.useWebWorkers(true, 'static/workers/IFCWorker.js')
     }
 
     onPick(event) {
